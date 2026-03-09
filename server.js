@@ -44,6 +44,10 @@ app.use("/api/reviews",reviewRoutes)
 app.use("/api/admin",adminRoutes)
 app.use("/api/upload",uploadRoutes)
 
+app.get("/", (req, res) => {
+  res.send("https://barber-shop-backend-zoxv.onrender.com/")
+})
+
 io.on("connection",(socket)=>{
 console.log("socket connected")
 })
