@@ -20,9 +20,14 @@ dotenv.config()
 
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server,{cors:{origin:"*"}})
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || "*",
+  credentials: true,
+}
 
-app.use(cors())
+const io = new Server(server, { cors: corsOptions })
+
+app.use(cors(corsOptions))
 app.use(express.json())
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
@@ -45,6 +50,6 @@ console.log("socket connected")
 
 const PORT = process.env.PORT || 5001
 
-server.listen(PORT,()=>{
-console.log("server running on",PORT)
+server.listen(PORT, () => {
+  console.log(`backend ishlayapti: ${PORT}`)
 })
