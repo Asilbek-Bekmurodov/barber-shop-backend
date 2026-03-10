@@ -6,13 +6,19 @@ export const createUser = async (req, res) => {
   if (!name || !email || !password) {
     return res.status(400).json({ message: "name, email, password required" })
   }
+  const normalizedEmail = email.toLowerCase().trim()
   const allowedRoles = ["admin", "barber", "client"]
   const finalRole = role && allowedRoles.includes(role) ? role : "client"
 
-  const exists = await User.findOne({ email })
+  const exists = await User.findOne({ email: normalizedEmail })
   if (exists) return res.status(400).json({ message: "Email already used" })
 
   const hash = await bcrypt.hash(password, 10)
-  const user = await User.create({ name, email, password: hash, role: finalRole })
+  const user = await User.create({
+    name,
+    email: normalizedEmail,
+    password: hash,
+    role: finalRole,
+  })
   res.status(201).json({ id: user._id, name: user.name, email: user.email, role: user.role })
 }

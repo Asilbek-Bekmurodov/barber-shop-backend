@@ -1,11 +1,24 @@
 
 import mongoose from "mongoose"
 
-const schema = new mongoose.Schema({
-name:String,
-email:{type:String,unique:true},
-password:String,
-role:{type:String,enum:["superadmin","admin","barber","client"],default:"client"}
-},{timestamps:true})
+const schema = new mongoose.Schema(
+  {
+    name: { type: String, trim: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: ["superadmin", "admin", "barber", "client"],
+      default: "client",
+    },
+  },
+  { timestamps: true }
+)
 
 export default mongoose.model("User",schema)
