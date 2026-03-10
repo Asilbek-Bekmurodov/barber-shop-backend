@@ -15,6 +15,7 @@ import serviceRoutes from "./src/routes/service.routes.js"
 import reviewRoutes from "./src/routes/review.routes.js"
 import adminRoutes from "./src/routes/admin.routes.js"
 import uploadRoutes from "./src/routes/upload.routes.js"
+import userRoutes from "./src/routes/user.routes.js"
 
 dotenv.config()
 
@@ -43,6 +44,7 @@ app.use("/api/services",serviceRoutes)
 app.use("/api/reviews",reviewRoutes)
 app.use("/api/admin",adminRoutes)
 app.use("/api/upload",uploadRoutes)
+app.use("/api/users",userRoutes)
 
 app.get("/", (req, res) => {
   res.send("https://barber-shop-backend-zoxv.onrender.com/")
