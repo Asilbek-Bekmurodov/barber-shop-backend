@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken"
 
 export const register = async(req,res)=>{
 const {name,email,password}=req.body
+if(Object.prototype.hasOwnProperty.call(req.body,"role")){
+return res.status(400).json({message:"role is not allowed on register"})
+}
 if(!name || !email || !password){
 return res.status(400).json({message:"name, email, password required"})
 }

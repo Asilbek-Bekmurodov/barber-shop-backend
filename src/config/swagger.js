@@ -38,7 +38,6 @@ const swaggerDefinition = {
                     name: "John Doe",
                     email: "john@example.com",
                     password: "Secret123!",
-                    role: "customer",
                   },
                 },
               },
