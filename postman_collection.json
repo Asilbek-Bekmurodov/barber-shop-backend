@@ -1,0 +1,134 @@
+{
+  "info": {
+    "name": "Barbershop Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://barber-shop-backend-zoxv.onrender.com" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/auth/register",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Secret123!\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Secret123!\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Barbers - List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/barbers"
+      }
+    },
+    {
+      "name": "Barbers - Create",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/barbers",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Aziz\",\n  \"specialty\": \"Fade\",\n  \"experienceYears\": 5\n}"
+        }
+      }
+    },
+    {
+      "name": "Services - List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/services"
+      }
+    },
+    {
+      "name": "Services - Create",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/services",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Haircut\",\n  \"price\": 50000,\n  \"durationMinutes\": 30\n}"
+        }
+      }
+    },
+    {
+      "name": "Bookings - List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/bookings"
+      }
+    },
+    {
+      "name": "Bookings - Create",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/bookings",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"barberId\": \"65f0d0b1c2a1b2c3d4e5f678\",\n  \"serviceId\": \"65f0d0b1c2a1b2c3d4e5f679\",\n  \"date\": \"2026-03-10\",\n  \"time\": \"14:00\",\n  \"customerName\": \"John Doe\",\n  \"customerPhone\": \"+998901234567\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Reviews - Create",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/reviews",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"barberId\": \"65f0d0b1c2a1b2c3d4e5f678\",\n  \"rating\": 5,\n  \"comment\": \"Zo'r xizmat!\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Reviews - By Barber",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/reviews/barber/{{barberId}}"
+      }
+    },
+    {
+      "name": "Admin - Dashboard",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/admin/dashboard"
+      }
+    },
+    {
+      "name": "Upload - Image",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/upload",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "image", "type": "file", "src": "" }
+          ]
+        }
+      }
+    }
+  ]
+}
