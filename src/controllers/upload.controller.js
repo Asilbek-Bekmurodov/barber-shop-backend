@@ -24,7 +24,7 @@ export const uploadFileToR2 = async (file) => {
       })
     )
 
-    const url = `${r2PublicBaseUrl.replace(/\\/$/, "")}/${key}`
+    const url = `${r2PublicBaseUrl.replace(/\/$/, "")}/${key}`
     return url
   } finally {
     await fs.unlink(file.path).catch(() => {})
