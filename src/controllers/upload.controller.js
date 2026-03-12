@@ -1,5 +1,5 @@
 
-import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import crypto from "crypto"
 import fs from "fs/promises"
 import path from "path"
@@ -47,5 +47,44 @@ export const uploadImage = async (req, res) => {
     return res.json({ url })
   } catch (err) {
     return res.status(500).json({ message: "Upload failed" })
+  }
+}
+
+const extractKeyFromUrl = (url) => {
+  try {
+    const base = r2PublicBaseUrl ? r2PublicBaseUrl.replace(/\/$/, "") : ""
+    if (base && url.startsWith(base)) {
+      return url.slice(base.length + 1)
+    }
+    const u = new URL(url)
+    return u.pathname.replace(/^\/+/, "")
+  } catch {
+    return null
+  }
+}
+
+export const deleteImage = async (req, res) => {
+  if (!r2Bucket) {
+    return res.status(500).json({
+      message: "R2 not configured. Check R2_BUCKET.",
+    })
+  }
+
+  const { key, url } = req.body || {}
+  const finalKey = key || (url ? extractKeyFromUrl(url) : null)
+  if (!finalKey) {
+    return res.status(400).json({ message: "key or url required" })
+  }
+
+  try {
+    await r2.send(
+      new DeleteObjectCommand({
+        Bucket: r2Bucket,
+        Key: finalKey,
+      })
+    )
+    return res.json({ message: "deleted", key: finalKey })
+  } catch (err) {
+    return res.status(500).json({ message: "Delete failed" })
   }
 }

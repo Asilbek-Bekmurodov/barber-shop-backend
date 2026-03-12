@@ -19,3 +19,15 @@ export const getBookings = async(req,res)=>{
 const data = await Booking.find().populate("barberId serviceId userId")
 res.json(data)
 }
+
+export const updateBooking = async(req,res)=>{
+const updated = await Booking.findByIdAndUpdate(req.params.id, req.body, { new: true })
+if(!updated) return res.status(404).json({message:"booking not found"})
+res.json(updated)
+}
+
+export const deleteBooking = async(req,res)=>{
+const deleted = await Booking.findByIdAndDelete(req.params.id)
+if(!deleted) return res.status(404).json({message:"booking not found"})
+res.json({message:"deleted"})
+}

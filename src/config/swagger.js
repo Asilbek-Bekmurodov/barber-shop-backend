@@ -144,6 +144,53 @@ const swaggerDefinition = {
         },
         responses: { 201: { description: "Created" } },
       },
+      get: {
+        tags: ["Users"],
+        summary: "List users (superadmin only)",
+        security: [{ bearerAuth: [] }],
+        responses: { 200: { description: "OK" } },
+      },
+    },
+    "/api/users/{id}": {
+      put: {
+        tags: ["Users"],
+        summary: "Update user (superadmin only)",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          { name: "id", in: "path", required: true, schema: { type: "string" } },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { type: "object" },
+              examples: {
+                example: {
+                  summary: "Update user payload",
+                  value: {
+                    name: "Jane Doe",
+                    phone: "+998901234567",
+                    age: 23,
+                    rating: 4.6,
+                    image: "https://cdn.example.com/uploads/uuid.jpg",
+                    role: "admin",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: { 200: { description: "OK" } },
+      },
+      delete: {
+        tags: ["Users"],
+        summary: "Delete user (superadmin only)",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          { name: "id", in: "path", required: true, schema: { type: "string" } },
+        ],
+        responses: { 200: { description: "OK" } },
+      },
     },
     "/api/barbers/{id}/availability": {
       get: {
@@ -367,6 +414,43 @@ const swaggerDefinition = {
         responses: { 200: { description: "OK" } },
       },
     },
+    "/api/services/{id}": {
+      put: {
+        tags: ["Services"],
+        summary: "Update service",
+        parameters: [
+          { name: "id", in: "path", required: true, schema: { type: "string" } },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { type: "object" },
+              examples: {
+                example: {
+                  summary: "Update service payload",
+                  value: {
+                    title: "Haircut Premium",
+                    price: 70000,
+                    duration: 45,
+                    description: "Premium haircut",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: { 200: { description: "OK" } },
+      },
+      delete: {
+        tags: ["Services"],
+        summary: "Delete service",
+        parameters: [
+          { name: "id", in: "path", required: true, schema: { type: "string" } },
+        ],
+        responses: { 200: { description: "OK" } },
+      },
+    },
     "/api/bookings": {
       get: {
         tags: ["Bookings"],
@@ -397,6 +481,42 @@ const swaggerDefinition = {
             },
           },
         },
+        responses: { 200: { description: "OK" } },
+      },
+    },
+    "/api/bookings/{id}": {
+      put: {
+        tags: ["Bookings"],
+        summary: "Update booking",
+        parameters: [
+          { name: "id", in: "path", required: true, schema: { type: "string" } },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { type: "object" },
+              examples: {
+                example: {
+                  summary: "Update booking payload",
+                  value: {
+                    date: "2026-03-12",
+                    startTime: "16:00",
+                    status: "confirmed",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: { 200: { description: "OK" } },
+      },
+      delete: {
+        tags: ["Bookings"],
+        summary: "Delete booking",
+        parameters: [
+          { name: "id", in: "path", required: true, schema: { type: "string" } },
+        ],
         responses: { 200: { description: "OK" } },
       },
     },
@@ -468,6 +588,27 @@ const swaggerDefinition = {
                   summary: "Upload image",
                   value: {
                     image: "(binary)",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: { 200: { description: "OK" } },
+      },
+      delete: {
+        tags: ["Upload"],
+        summary: "Delete image",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { type: "object" },
+              examples: {
+                example: {
+                  summary: "Delete image payload",
+                  value: {
+                    key: "uploads/uuid.jpg",
                   },
                 },
               },

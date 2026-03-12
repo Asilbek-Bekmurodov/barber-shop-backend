@@ -1,6 +1,6 @@
 import { Router } from "express"
 import multer from "multer"
-import { createUser } from "../controllers/user.controller.js"
+import { createUser, listUsers, updateUser, deleteUser } from "../controllers/user.controller.js"
 import { uploadFileToR2 } from "../controllers/upload.controller.js"
 import { requireAuth } from "../middleware/auth.js"
 import { requireRole } from "../middleware/requireRole.js"
@@ -11,6 +11,9 @@ const upload = multer({ dest: "uploads/" })
 
 // Only superadmin can create users
 r.post("/", requireAuth, requireRole("superadmin"), createUser)
+r.get("/", requireAuth, requireRole("superadmin"), listUsers)
+r.put("/:id", requireAuth, requireRole("superadmin"), updateUser)
+r.delete("/:id", requireAuth, requireRole("superadmin"), deleteUser)
 
 r.post("/:id/photo", requireAuth, upload.single("image"), async (req, res) => {
   if (!req.file) return res.status(400).json({ message: "No file uploaded" })
