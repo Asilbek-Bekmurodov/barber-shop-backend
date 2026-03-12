@@ -8,8 +8,8 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: `http://localhost:${process.env.PORT || 5001}`,
-      description: "Local",
+      url: "https://shop-co-backend-9qpc.onrender.com",
+      description: "Production",
     },
   ],
   components: {
