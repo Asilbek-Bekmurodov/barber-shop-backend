@@ -3,6 +3,9 @@ import mongoose from "mongoose"
 
 const schema = new mongoose.Schema({
 name:String,
+firstName:String,
+lastName:String,
+phone:String,
 experience:Number,
 speciality:String,
 rating:Number,

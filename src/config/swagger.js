@@ -36,6 +36,12 @@ const swaggerDefinition = {
                   summary: "Register payload",
                   value: {
                     name: "John Doe",
+                    firstName: "John",
+                    lastName: "Doe",
+                    phone: "+998901234567",
+                    age: 24,
+                    rating: 4.8,
+                    image: "https://cdn.example.com/uploads/uuid.jpg",
                     email: "john@example.com",
                     password: "Secret123!",
                   },
@@ -90,9 +96,238 @@ const swaggerDefinition = {
                   summary: "Create barber payload",
                   value: {
                     name: "Aziz",
-                    specialty: "Fade",
-                    experienceYears: 5,
+                    firstName: "Aziz",
+                    lastName: "Karimov",
+                    phone: "+998901234567",
+                    rating: 4.7,
+                    speciality: "Fade",
+                    experience: 5,
+                    image: "https://cdn.example.com/uploads/uuid.jpg",
                   },
+                },
+              },
+            },
+          },
+        },
+        responses: { 200: { description: "OK" } },
+      },
+    },
+    "/api/users": {
+      post: {
+        tags: ["Users"],
+        summary: "Create user (superadmin only)",
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { type: "object" },
+              examples: {
+                example: {
+                  summary: "Create user payload",
+                  value: {
+                    name: "Jane Doe",
+                    firstName: "Jane",
+                    lastName: "Doe",
+                    phone: "+998901234567",
+                    age: 22,
+                    rating: 4.5,
+                    image: "https://cdn.example.com/uploads/uuid.jpg",
+                    email: "jane@example.com",
+                    password: "Secret123!",
+                    role: "admin",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: { 201: { description: "Created" } },
+      },
+    },
+    "/api/barbers/{id}/availability": {
+      get: {
+        tags: ["Barbers"],
+        summary: "Get barber available slots",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+          {
+            name: "date",
+            in: "query",
+            required: true,
+            schema: { type: "string", example: "2026-03-12" },
+          },
+          {
+            name: "slotMinutes",
+            in: "query",
+            required: false,
+            schema: { type: "integer", example: 30 },
+          },
+        ],
+        responses: { 200: { description: "OK" } },
+      },
+    },
+    "/api/barbers/{id}/photo": {
+      post: {
+        tags: ["Barbers"],
+        summary: "Upload barber profile photo",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "multipart/form-data": {
+              schema: {
+                type: "object",
+                properties: {
+                  image: { type: "string", format: "binary" },
+                },
+              },
+            },
+          },
+        },
+        responses: { 200: { description: "OK" } },
+      },
+    },
+    "/api/barbers/{id}/services": {
+      get: {
+        tags: ["Barbers"],
+        summary: "List barber services",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
+        responses: { 200: { description: "OK" } },
+      },
+      post: {
+        tags: ["Barbers"],
+        summary: "Create barber service",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { type: "object" },
+              examples: {
+                example: {
+                  summary: "Create barber service payload",
+                  value: {
+                    title: "Haircut",
+                    price: 50000,
+                    duration: 30,
+                    description: "Classic haircut",
+                    barberId: "65f0d0b1c2a1b2c3d4e5f678",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: { 201: { description: "Created" } },
+      },
+    },
+    "/api/barbers/{id}/services/{serviceId}": {
+      put: {
+        tags: ["Barbers"],
+        summary: "Update barber service",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+          {
+            name: "serviceId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { type: "object" },
+              examples: {
+                example: {
+                  summary: "Update barber service payload",
+                  value: {
+                    title: "Haircut Premium",
+                    price: 70000,
+                    duration: 45,
+                    description: "Premium haircut",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: { 200: { description: "OK" } },
+      },
+      delete: {
+        tags: ["Barbers"],
+        summary: "Delete barber service",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+          {
+            name: "serviceId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
+        responses: { 200: { description: "OK" } },
+      },
+    },
+    "/api/users/{id}/photo": {
+      post: {
+        tags: ["Users"],
+        summary: "Upload user profile photo",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "multipart/form-data": {
+              schema: {
+                type: "object",
+                properties: {
+                  image: { type: "string", format: "binary" },
                 },
               },
             },
@@ -119,9 +354,10 @@ const swaggerDefinition = {
                 example: {
                   summary: "Create service payload",
                   value: {
-                    name: "Haircut",
+                    title: "Haircut",
                     price: 50000,
-                    durationMinutes: 30,
+                    duration: 30,
+                    description: "Classic haircut",
                   },
                 },
               },
@@ -149,12 +385,12 @@ const swaggerDefinition = {
                 example: {
                   summary: "Create booking payload",
                   value: {
+                    userId: "65f0d0b1c2a1b2c3d4e5f677",
                     barberId: "65f0d0b1c2a1b2c3d4e5f678",
                     serviceId: "65f0d0b1c2a1b2c3d4e5f679",
                     date: "2026-03-10",
-                    time: "14:00",
-                    customerName: "John Doe",
-                    customerPhone: "+998901234567",
+                    startTime: "14:00",
+                    status: "pending",
                   },
                 },
               },
@@ -177,6 +413,7 @@ const swaggerDefinition = {
                 example: {
                   summary: "Create review payload",
                   value: {
+                    userId: "65f0d0b1c2a1b2c3d4e5f677",
                     barberId: "65f0d0b1c2a1b2c3d4e5f678",
                     rating: 5,
                     comment: "Zo'r xizmat!",
