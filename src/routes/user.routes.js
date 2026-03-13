@@ -9,8 +9,8 @@ import User from "../models/User.js"
 const r = Router()
 const upload = multer({ dest: "uploads/" })
 
-// Only superadmin can create users
-r.post("/", requireAuth, requireRole("superadmin"), createUser)
+// Admin and superadmin can create users
+r.post("/", requireAuth, requireRole("superadmin", "admin"), createUser)
 r.get("/", requireAuth, requireRole("superadmin"), listUsers)
 r.put("/:id", requireAuth, requireRole("superadmin"), updateUser)
 r.delete("/:id", requireAuth, requireRole("superadmin"), deleteUser)

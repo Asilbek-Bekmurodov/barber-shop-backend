@@ -7,7 +7,7 @@ export const createUser = async (req, res) => {
     return res.status(400).json({ message: "name, email, password required" })
   }
   const normalizedEmail = email.toLowerCase().trim()
-  const allowedRoles = ["admin", "barber", "client"]
+  const allowedRoles = req.user?.role === "superadmin" ? ["admin", "barber", "client"] : ["barber", "client"]
   const finalRole = role && allowedRoles.includes(role) ? role : "client"
 
   const exists = await User.findOne({ email: normalizedEmail })

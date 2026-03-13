@@ -117,7 +117,7 @@ const swaggerDefinition = {
     "/api/users": {
       post: {
         tags: ["Users"],
-        summary: "Create user (superadmin only)",
+        summary: "Create user (admin or superadmin only)",
         security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
@@ -137,7 +137,7 @@ const swaggerDefinition = {
                     image: "https://cdn.example.com/uploads/uuid.jpg",
                     email: "jane@example.com",
                     password: "Secret123!",
-                    role: "admin",
+                    role: "barber",
                   },
                 },
               },
