@@ -123,37 +123,6 @@
       }
     },
     {
-      "name": "Services - Create",
-      "request": {
-        "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": "{{baseUrl}}/api/services",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"barberId\": \"{{barberId}}\",\n  \"title\": \"Beard Trim\",\n  \"price\": 30000,\n  \"duration\": 20,\n  \"description\": \"Beard styling\"\n}"
-        }
-      }
-    },
-    {
-      "name": "Services - Update",
-      "request": {
-        "method": "PUT",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": "{{baseUrl}}/api/services/{{serviceId}}",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"Beard Trim Deluxe\",\n  \"price\": 40000,\n  \"duration\": 25,\n  \"description\": \"Updated beard styling\"\n}"
-        }
-      }
-    },
-    {
-      "name": "Services - Delete",
-      "request": {
-        "method": "DELETE",
-        "url": "{{baseUrl}}/api/services/{{serviceId}}"
-      }
-    },
-    {
       "name": "Bookings - List",
       "request": {
         "method": "GET",
