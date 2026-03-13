@@ -2,6 +2,7 @@
 import mongoose from "mongoose"
 
 const schema = new mongoose.Schema({
+userId:{type:mongoose.Schema.Types.ObjectId,ref:"User",unique:true,sparse:true},
 name:String,
 firstName:String,
 lastName:String,

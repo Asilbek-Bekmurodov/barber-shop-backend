@@ -8,7 +8,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: "https://shop-co-backend-9qpc.onrender.com",
+      url: "https://barber-shop-backend-zoxv.onrender.com",
       description: "Production",
     },
   ],
@@ -85,7 +85,8 @@ const swaggerDefinition = {
       },
       post: {
         tags: ["Barbers"],
-        summary: "Create barber",
+        summary: "Create barber (admin or superadmin only)",
+        security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
           content: {
@@ -95,6 +96,7 @@ const swaggerDefinition = {
                 example: {
                   summary: "Create barber payload",
                   value: {
+                    userId: "65f0d0b1c2a1b2c3d4e5f670",
                     name: "Aziz",
                     firstName: "Aziz",
                     lastName: "Karimov",
@@ -222,7 +224,8 @@ const swaggerDefinition = {
     "/api/barbers/{id}/photo": {
       post: {
         tags: ["Barbers"],
-        summary: "Upload barber profile photo",
+        summary: "Upload barber profile photo (owner barber, admin, or superadmin)",
+        security: [{ bearerAuth: [] }],
         parameters: [
           {
             name: "id",
@@ -247,6 +250,38 @@ const swaggerDefinition = {
         responses: { 200: { description: "OK" } },
       },
     },
+    "/api/barbers/{id}/link-user": {
+      post: {
+        tags: ["Barbers"],
+        summary: "Link barber profile to barber user (admin or superadmin only)",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { type: "object" },
+              examples: {
+                example: {
+                  summary: "Link barber user payload",
+                  value: {
+                    userId: "65f0d0b1c2a1b2c3d4e5f670",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: { 200: { description: "OK" } },
+      },
+    },
     "/api/barbers/{id}/services": {
       get: {
         tags: ["Barbers"],
@@ -263,7 +298,8 @@ const swaggerDefinition = {
       },
       post: {
         tags: ["Barbers"],
-        summary: "Create barber service",
+        summary: "Create barber service (owner barber, admin, or superadmin)",
+        security: [{ bearerAuth: [] }],
         parameters: [
           {
             name: "id",
@@ -285,7 +321,6 @@ const swaggerDefinition = {
                     price: 50000,
                     duration: 30,
                     description: "Classic haircut",
-                    barberId: "65f0d0b1c2a1b2c3d4e5f678",
                   },
                 },
               },
@@ -298,7 +333,8 @@ const swaggerDefinition = {
     "/api/barbers/{id}/services/{serviceId}": {
       put: {
         tags: ["Barbers"],
-        summary: "Update barber service",
+        summary: "Update barber service (owner barber, admin, or superadmin)",
+        security: [{ bearerAuth: [] }],
         parameters: [
           {
             name: "id",
@@ -336,7 +372,8 @@ const swaggerDefinition = {
       },
       delete: {
         tags: ["Barbers"],
-        summary: "Delete barber service",
+        summary: "Delete barber service (owner barber, admin, or superadmin)",
+        security: [{ bearerAuth: [] }],
         parameters: [
           {
             name: "id",

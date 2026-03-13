@@ -1,10 +1,14 @@
 
 import express from "express"
 import multer from "multer"
+import mongoose from "mongoose"
 import Barber from "../models/Barber.js"
 import Booking from "../models/Booking.js"
 import Service from "../models/Service.js"
+import User from "../models/User.js"
 import { uploadFileToR2 } from "../controllers/upload.controller.js"
+import { requireAuth } from "../middleware/auth.js"
+import { requireRole } from "../middleware/requireRole.js"
 const r=express.Router()
 const upload = multer({dest:"uploads/"})
 
@@ -32,21 +36,76 @@ const isDayOff = (daysOff,dateStr)=>{
   return set.has(dateStr.toLowerCase()) || set.has(dayName) || set.has(dayShort)
 }
 
+const loadBarber = async (req,res,next)=>{
+  if(!mongoose.isValidObjectId(req.params.id)){
+    return res.status(400).json({message:"barber id must be a valid ObjectId"})
+  }
+
+  const barber = await Barber.findById(req.params.id)
+  if(!barber) return res.status(404).json({message:"barber not found"})
+
+  req.barber = barber
+  next()
+}
+
+const requireBarberOwnership = (req,res,next)=>{
+  if(!req.user) return res.status(401).json({message:"Unauthorized"})
+
+  if(["superadmin","admin"].includes(req.user.role)){
+    return next()
+  }
+
+  if(req.user.role !== "barber"){
+    return res.status(403).json({message:"Forbidden"})
+  }
+
+  if(!req.barber?.userId){
+    return res.status(403).json({message:"barber profile is not linked to a user"})
+  }
+
+  if(String(req.barber.userId) !== String(req.user._id)){
+    return res.status(403).json({message:"Forbidden"})
+  }
+
+  next()
+}
+
 r.get("/",async(req,res)=>{
 const data = await Barber.find()
 res.json(data)
 })
 
-r.post("/",async(req,res)=>{
+r.post("/",requireAuth,requireRole("superadmin","admin"),async(req,res)=>{
 const data = await Barber.create(req.body)
 res.json(data)
 })
 
-r.post("/:id/photo",upload.single("image"),async(req,res)=>{
-  if(!req.file) return res.status(400).json({message:"No file uploaded"})
+r.post("/:id/link-user",requireAuth,requireRole("superadmin","admin"),loadBarber,async(req,res)=>{
+  const { userId } = req.body || {}
+  if(!mongoose.isValidObjectId(userId)){
+    return res.status(400).json({message:"userId must be a valid ObjectId"})
+  }
 
-  const barber = await Barber.findById(req.params.id)
-  if(!barber) return res.status(404).json({message:"barber not found"})
+  const user = await User.findById(userId)
+  if(!user) return res.status(404).json({message:"user not found"})
+  if(user.role !== "barber"){
+    return res.status(400).json({message:"user role must be barber"})
+  }
+
+  const existing = await Barber.findOne({ userId, _id: { $ne: req.barber._id } })
+  if(existing){
+    return res.status(400).json({message:"user already linked to another barber"})
+  }
+
+  req.barber.userId = user._id
+  await req.barber.save()
+
+  res.json(req.barber)
+})
+
+r.post("/:id/photo",requireAuth,loadBarber,requireBarberOwnership,upload.single("image"),async(req,res)=>{
+  if(!req.file) return res.status(400).json({message:"No file uploaded"})
+  const barber = req.barber
 
   try{
     const url = await uploadFileToR2(req.file)
@@ -65,9 +124,8 @@ r.get("/:id/services",async(req,res)=>{
   res.json(services)
 })
 
-r.post("/:id/services",async(req,res)=>{
-  const barber = await Barber.findById(req.params.id)
-  if(!barber) return res.status(404).json({message:"barber not found"})
+r.post("/:id/services",requireAuth,loadBarber,requireBarberOwnership,async(req,res)=>{
+  const barber = req.barber
   const service = await Service.create({
     ...req.body,
     barberId: barber._id,
@@ -75,9 +133,8 @@ r.post("/:id/services",async(req,res)=>{
   res.status(201).json(service)
 })
 
-r.put("/:id/services/:serviceId",async(req,res)=>{
-  const barber = await Barber.findById(req.params.id)
-  if(!barber) return res.status(404).json({message:"barber not found"})
+r.put("/:id/services/:serviceId",requireAuth,loadBarber,requireBarberOwnership,async(req,res)=>{
+  const barber = req.barber
   const updated = await Service.findOneAndUpdate(
     { _id: req.params.serviceId, barberId: barber._id },
     req.body,
@@ -87,9 +144,8 @@ r.put("/:id/services/:serviceId",async(req,res)=>{
   res.json(updated)
 })
 
-r.delete("/:id/services/:serviceId",async(req,res)=>{
-  const barber = await Barber.findById(req.params.id)
-  if(!barber) return res.status(404).json({message:"barber not found"})
+r.delete("/:id/services/:serviceId",requireAuth,loadBarber,requireBarberOwnership,async(req,res)=>{
+  const barber = req.barber
   const deleted = await Service.findOneAndDelete({ _id: req.params.serviceId, barberId: barber._id })
   if(!deleted) return res.status(404).json({message:"service not found"})
   res.json({message:"deleted"})
