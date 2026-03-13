@@ -11,9 +11,9 @@ const upload = multer({ dest: "uploads/" })
 
 // Admin and superadmin can create users
 r.post("/", requireAuth, requireRole("superadmin", "admin"), createUser)
-r.get("/", requireAuth, requireRole("superadmin"), listUsers)
-r.put("/:id", requireAuth, requireRole("superadmin"), updateUser)
-r.delete("/:id", requireAuth, requireRole("superadmin"), deleteUser)
+r.get("/", requireAuth, requireRole("superadmin", "admin"), listUsers)
+r.put("/:id", requireAuth, requireRole("superadmin", "admin"), updateUser)
+r.delete("/:id", requireAuth, requireRole("superadmin", "admin"), deleteUser)
 
 r.post("/:id/photo", requireAuth, upload.single("image"), async (req, res) => {
   if (!req.file) return res.status(400).json({ message: "No file uploaded" })

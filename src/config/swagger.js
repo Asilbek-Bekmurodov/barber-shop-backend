@@ -148,7 +148,7 @@ const swaggerDefinition = {
       },
       get: {
         tags: ["Users"],
-        summary: "List users (superadmin only)",
+        summary: "List users (admin or superadmin only)",
         security: [{ bearerAuth: [] }],
         responses: { 200: { description: "OK" } },
       },
@@ -156,7 +156,7 @@ const swaggerDefinition = {
     "/api/users/{id}": {
       put: {
         tags: ["Users"],
-        summary: "Update user (superadmin only)",
+        summary: "Update user (admin or superadmin only)",
         security: [{ bearerAuth: [] }],
         parameters: [
           { name: "id", in: "path", required: true, schema: { type: "string" } },
@@ -175,7 +175,7 @@ const swaggerDefinition = {
                     age: 23,
                     rating: 4.6,
                     image: "https://cdn.example.com/uploads/uuid.jpg",
-                    role: "admin",
+                    role: "barber",
                   },
                 },
               },
@@ -186,7 +186,7 @@ const swaggerDefinition = {
       },
       delete: {
         tags: ["Users"],
-        summary: "Delete user (superadmin only)",
+        summary: "Delete user (admin or superadmin only)",
         security: [{ bearerAuth: [] }],
         parameters: [
           { name: "id", in: "path", required: true, schema: { type: "string" } },
