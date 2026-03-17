@@ -75,6 +75,10 @@ const data = await Barber.find()
 res.json(data)
 })
 
+r.get("/:id",loadBarber,async(req,res)=>{
+res.json(req.barber)
+})
+
 r.post("/",requireAuth,requireRole("superadmin","admin"),async(req,res)=>{
 const data = await Barber.create(req.body)
 res.json(data)

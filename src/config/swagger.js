@@ -114,6 +114,21 @@ const swaggerDefinition = {
         responses: { 200: { description: "OK" } },
       },
     },
+    "/api/barbers/{id}": {
+      get: {
+        tags: ["Barbers"],
+        summary: "Get barber by id",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
+        responses: { 200: { description: "OK" } },
+      },
+    },
     "/api/users": {
       post: {
         tags: ["Users"],
